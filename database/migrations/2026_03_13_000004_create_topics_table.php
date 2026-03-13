@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('topics', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('information_sheet_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('lesson_id')->constrained()->cascadeOnDelete();
             $table->string('topic_number', 50);
             $table->string('title', 255);
             $table->longText('content')->nullable();
@@ -23,7 +23,7 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->index(['information_sheet_id', 'order']);
+            $table->index(['lesson_id', 'order']);
         });
     }
 

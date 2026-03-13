@@ -2,18 +2,19 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class InformationSheet extends Model
+class Lesson extends Model
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'module_id',
-        'sheet_number',
+        'lesson_number',
         'title',
         'description',
         'content',
@@ -29,22 +30,24 @@ class InformationSheet extends Model
     ];
 
     /**
-     * Boot method to handle model events.
+     * Boot method for cascade delete.
      */
     protected static function boot()
     {
         parent::boot();
 
-        // Cascade soft delete to topics
-        static::deleting(function ($sheet) {
-            $sheet->topics()->each(function ($topic) {
+        static::deleting(function ($lesson) {
+            $lesson->topics()->each(function ($topic) {
                 $topic->delete();
+            });
+            $lesson->quizzes()->each(function ($quiz) {
+                $quiz->delete();
             });
         });
     }
 
     /**
-     * Get the module that owns the information sheet.
+     * Get the module that owns the lesson.
      */
     public function module(): BelongsTo
     {
@@ -52,7 +55,7 @@ class InformationSheet extends Model
     }
 
     /**
-     * Get the topics for the information sheet.
+     * Get the topics for the lesson.
      */
     public function topics(): HasMany
     {
@@ -60,7 +63,15 @@ class InformationSheet extends Model
     }
 
     /**
-     * Scope to filter active information sheets.
+     * Get the quizzes for the lesson.
+     */
+    public function quizzes(): HasMany
+    {
+        return $this->hasMany(Quiz::class)->orderBy('order');
+    }
+
+    /**
+     * Scope for active lessons.
      */
     public function scopeActive($query)
     {
@@ -68,7 +79,7 @@ class InformationSheet extends Model
     }
 
     /**
-     * Scope to order by the order field.
+     * Scope for ordered lessons.
      */
     public function scopeOrdered($query)
     {
@@ -76,7 +87,7 @@ class InformationSheet extends Model
     }
 
     /**
-     * Check if the information sheet has any content.
+     * Check if the lesson has any content.
      */
     public function getHasContentAttribute(): bool
     {

@@ -408,7 +408,7 @@
 
                                 <div class="module-card-footer">
                                     <div class="module-stats">
-                                        <i class="fas fa-file-alt"></i> {{ $module->informationSheets->count() }} Information Sheets
+                                        <i class="fas fa-book-open"></i> {{ $module->lessons->count() }} Lessons
                                     </div>
 
                                     <div class="module-actions">

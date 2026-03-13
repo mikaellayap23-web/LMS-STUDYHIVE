@@ -106,8 +106,18 @@
             color: var(--white);
         }
 
+        .btn-info {
+            background: #17a2b8;
+            color: var(--white);
+        }
+
         .btn-danger {
             background: #e74c3c;
+            color: var(--white);
+        }
+
+        .btn-info {
+            background: #17a2b8;
             color: var(--white);
         }
 
@@ -151,14 +161,14 @@
             margin: 0;
         }
 
-        .sheets-section {
+        .lessons-section {
             background: var(--white);
             border: 1px solid var(--gray-200);
             border-radius: 8px;
             padding: 1.5rem;
         }
 
-        .sheets-header {
+        .lessons-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -167,7 +177,7 @@
             border-bottom: 1px solid var(--gray-200);
         }
 
-        .sheets-header h2 {
+        .lessons-header h2 {
             font-size: 1.25rem;
             font-weight: 700;
             color: var(--green-primary);
@@ -176,32 +186,32 @@
             gap: 0.5rem;
         }
 
-        .sheet-list {
+        .lesson-list {
             display: flex;
             flex-direction: column;
             gap: 1rem;
         }
 
-        .sheet-card {
+        .lesson-card {
             background: var(--gray-100);
             border: 1px solid var(--gray-200);
             border-radius: 6px;
             overflow: hidden;
         }
 
-        .sheet-card-header {
+        .lesson-card-header {
             background: linear-gradient(135deg, var(--green-pale) 0%, #e8f5e9 100%);
             padding: 1rem 1.25rem;
             border-bottom: 1px solid var(--gray-200);
         }
 
-        .sheet-meta {
+        .lesson-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .sheet-number {
+        .lesson-number {
             font-size: 0.75rem;
             font-weight: 600;
             color: var(--green-primary);
@@ -210,55 +220,63 @@
             border-radius: 4px;
         }
 
-        .sheet-status {
+        .lesson-status {
             font-size: 0.75rem;
             padding: 0.25rem 0.5rem;
             border-radius: 4px;
         }
 
-        .sheet-active {
+        .lesson-active {
             background: #d4edda;
             color: #155724;
         }
 
-        .sheet-inactive {
+        .lesson-inactive {
             background: #f8d7da;
             color: #721c24;
         }
 
-        .sheet-title {
+        .lesson-title {
             font-size: 1.125rem;
             font-weight: 600;
             color: var(--gray-900);
             margin: 0.5rem 0 0;
         }
 
-        .sheet-body {
+        .lesson-body {
             padding: 1.25rem;
         }
 
-        .sheet-description {
+        .lesson-description {
             font-size: 0.875rem;
             color: var(--gray-600);
             line-height: 1.6;
             margin-bottom: 1rem;
         }
 
-        .topics-list {
+        .content-lists {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .topics-list, .quizzes-list {
             background: var(--white);
             border: 1px solid var(--gray-200);
             border-radius: 4px;
             padding: 0.75rem;
-            margin-bottom: 1rem;
+            flex: 1;
+            min-width: 200px;
         }
 
-        .topics-list h5 {
+        .topics-list h5, .quizzes-list h5 {
             font-size: 0.8125rem;
             color: var(--gray-600);
             margin-bottom: 0.5rem;
         }
 
-        .topic-item {
+        .topic-item, .quiz-item {
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -267,12 +285,12 @@
             color: var(--gray-800);
         }
 
-        .topic-item a {
+        .topic-item a, .quiz-item a {
             color: var(--green-primary);
             text-decoration: none;
         }
 
-        .topic-item a:hover {
+        .topic-item a:hover, .quiz-item a:hover {
             text-decoration: underline;
         }
 
@@ -281,7 +299,12 @@
             font-size: 0.75rem;
         }
 
-        .sheet-footer {
+        .quiz-item i {
+            color: #17a2b8;
+            font-size: 0.75rem;
+        }
+
+        .lesson-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -289,7 +312,7 @@
             border-top: 1px solid var(--gray-200);
         }
 
-        .sheet-file {
+        .lesson-file {
             font-size: 0.8125rem;
             color: var(--gray-600);
             display: flex;
@@ -297,16 +320,16 @@
             gap: 0.375rem;
         }
 
-        .sheet-file a {
+        .lesson-file a {
             color: var(--green-primary);
             text-decoration: none;
         }
 
-        .sheet-file a:hover {
+        .lesson-file a:hover {
             text-decoration: underline;
         }
 
-        .sheet-actions {
+        .lesson-actions {
             display: flex;
             gap: 0.375rem;
         }
@@ -316,19 +339,19 @@
             font-size: 0.8125rem;
         }
 
-        .empty-sheets {
+        .empty-lessons {
             text-align: center;
             padding: 3rem 1.5rem;
             color: var(--gray-600);
         }
 
-        .empty-sheets i {
+        .empty-lessons i {
             font-size: 3rem;
             color: var(--gray-400);
             margin-bottom: 1rem;
         }
 
-        .empty-sheets h3 {
+        .empty-lessons h3 {
             font-size: 1.125rem;
             color: var(--gray-800);
             margin-bottom: 0.5rem;
@@ -418,68 +441,85 @@
                 @endif
             </div>
 
-            <div class="sheets-section">
-                <div class="sheets-header">
-                    <h2><i class="fas fa-file-alt"></i> Information Sheets</h2>
+            <div class="lessons-section">
+                <div class="lessons-header">
+                    <h2><i class="fas fa-book-open"></i> Lessons</h2>
                     @if(auth()->user()->isAdmin() || (auth()->user()->isTeacher() && $course->instructor_id === auth()->id()))
-                        <a href="{{ route('courses.modules.sheets.create', [$course, $module]) }}" class="btn btn-primary">
-                            <i class="fas fa-plus"></i> Add Sheet
+                        <a href="{{ route('courses.modules.lessons.create', [$course, $module]) }}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add Lesson
                         </a>
                     @endif
                 </div>
 
-                @if($module->informationSheets->count() > 0)
-                    <div class="sheet-list">
-                        @foreach($module->informationSheets as $sheet)
-                            <div class="sheet-card">
-                                <div class="sheet-card-header">
-                                    <div class="sheet-meta">
-                                        <span class="sheet-number">{{ $sheet->sheet_number }}</span>
-                                        <span class="sheet-status {{ $sheet->is_active ? 'sheet-active' : 'sheet-inactive' }}">
-                                            {{ $sheet->is_active ? 'Active' : 'Inactive' }}
+                @if($module->lessons->count() > 0)
+                    <div class="lesson-list">
+                        @foreach($module->lessons as $lesson)
+                            <div class="lesson-card">
+                                <div class="lesson-card-header">
+                                    <div class="lesson-meta">
+                                        <span class="lesson-number">{{ $lesson->lesson_number }}</span>
+                                        <span class="lesson-status {{ $lesson->is_active ? 'lesson-active' : 'lesson-inactive' }}">
+                                            {{ $lesson->is_active ? 'Active' : 'Inactive' }}
                                         </span>
                                     </div>
-                                    <h3 class="sheet-title">{{ $sheet->title }}</h3>
+                                    <h3 class="lesson-title">{{ $lesson->title }}</h3>
                                 </div>
 
-                                <div class="sheet-body">
-                                    @if($sheet->description)
-                                        <p class="sheet-description">{{ Str::limit($sheet->description, 200) }}</p>
+                                <div class="lesson-body">
+                                    @if($lesson->description)
+                                        <p class="lesson-description">{{ Str::limit($lesson->description, 200) }}</p>
                                     @endif
 
-                                    @if($sheet->topics->count() > 0)
-                                        <div class="topics-list">
-                                            <h5><i class="fas fa-list"></i> Topics ({{ $sheet->topics->count() }})</h5>
-                                            @foreach($sheet->topics as $topic)
-                                                <div class="topic-item">
-                                                    <i class="fas fa-chevron-right"></i>
-                                                    <a href="{{ route('topics.show', $topic) }}">{{ $topic->topic_number }}: {{ $topic->title }}</a>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    @endif
+                                    <div class="content-lists">
+                                        @if($lesson->topics->count() > 0)
+                                            <div class="topics-list">
+                                                <h5><i class="fas fa-list"></i> Topics ({{ $lesson->topics->count() }})</h5>
+                                                @foreach($lesson->topics as $topic)
+                                                    <div class="topic-item">
+                                                        <i class="fas fa-chevron-right"></i>
+                                                        <a href="{{ route('topics.show', $topic) }}">{{ $topic->topic_number }}: {{ $topic->title }}</a>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @endif
 
-                                    <div class="sheet-footer">
-                                        <div class="sheet-file">
-                                            @if($sheet->file_path)
+                                        @if($lesson->quizzes->count() > 0)
+                                            <div class="quizzes-list">
+                                                <h5><i class="fas fa-question-circle"></i> Quizzes ({{ $lesson->quizzes->count() }})</h5>
+                                                @foreach($lesson->quizzes as $quiz)
+                                                    <div class="quiz-item">
+                                                        <i class="fas fa-clipboard-check"></i>
+                                                        <a href="{{ route('quizzes.show', $quiz) }}">{{ $quiz->quiz_number }}: {{ $quiz->title }}</a>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    <div class="lesson-footer">
+                                        <div class="lesson-file">
+                                            @if($lesson->file_path)
                                                 <i class="fas fa-paperclip"></i>
-                                                <a href="{{ route('courses.modules.sheets.download', [$course, $module, $sheet]) }}">
-                                                    {{ $sheet->original_filename ?? 'Download File' }}
+                                                <a href="{{ route('courses.modules.lessons.download', [$course, $module, $lesson]) }}">
+                                                    {{ $lesson->original_filename ?? 'Download File' }}
                                                 </a>
                                             @else
                                                 <span style="color: var(--gray-400);">No file attached</span>
                                             @endif
                                         </div>
 
-                                        <div class="sheet-actions">
+                                        <div class="lesson-actions">
                                             @if(auth()->user()->isAdmin() || (auth()->user()->isTeacher() && $course->instructor_id === auth()->id()))
-                                                <a href="{{ route('sheets.topics.create', $sheet) }}" class="btn btn-primary btn-sm">
+                                                <a href="{{ route('lessons.topics.create', $lesson) }}" class="btn btn-primary btn-sm">
                                                     <i class="fas fa-plus"></i> Topic
                                                 </a>
-                                                <a href="{{ route('courses.modules.sheets.edit', [$course, $module, $sheet]) }}" class="btn btn-secondary btn-sm">
+                                                <a href="{{ route('lessons.quizzes.create', $lesson) }}" class="btn btn-info btn-sm">
+                                                    <i class="fas fa-plus"></i> Quiz
+                                                </a>
+                                                <a href="{{ route('courses.modules.lessons.edit', [$course, $module, $lesson]) }}" class="btn btn-secondary btn-sm">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <form action="{{ route('courses.modules.sheets.destroy', [$course, $module, $sheet]) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete this information sheet and all its topics?');">
+                                                <form action="{{ route('courses.modules.lessons.destroy', [$course, $module, $lesson]) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete this lesson and all its content?');">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm">
@@ -494,13 +534,13 @@
                         @endforeach
                     </div>
                 @else
-                    <div class="empty-sheets">
-                        <i class="fas fa-file-alt"></i>
-                        <h3>No Information Sheets Yet</h3>
-                        <p>This module doesn't have any information sheets. Add your first sheet to get started.</p>
+                    <div class="empty-lessons">
+                        <i class="fas fa-book-open"></i>
+                        <h3>No Lessons Yet</h3>
+                        <p>This module doesn't have any lessons. Add your first lesson to get started.</p>
                         @if(auth()->user()->isAdmin() || (auth()->user()->isTeacher() && $course->instructor_id === auth()->id()))
-                            <a href="{{ route('courses.modules.sheets.create', [$course, $module]) }}" class="btn btn-primary" style="margin-top: 1rem;">
-                                <i class="fas fa-plus"></i> Add First Information Sheet
+                            <a href="{{ route('courses.modules.lessons.create', [$course, $module]) }}" class="btn btn-primary" style="margin-top: 1rem;">
+                                <i class="fas fa-plus"></i> Add First Lesson
                             </a>
                         @endif
                     </div>

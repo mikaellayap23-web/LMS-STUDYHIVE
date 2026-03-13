@@ -8,8 +8,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ModuleController;
-use App\Http\Controllers\InformationSheetController;
+use App\Http\Controllers\LessonController;
 use App\Http\Controllers\TopicController;
+use App\Http\Controllers\QuizController;
 
 //WELCOME PAGE//
 
@@ -90,19 +91,19 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/modules/{module}', [ModuleController::class, 'update'])->name('modules.update');
         Route::delete('/modules/{module}', [ModuleController::class, 'destroy'])->name('modules.destroy');
 
-        // Information Sheets (nested under modules)
+        // Lessons (nested under modules)
         Route::prefix('modules/{module}')->name('modules.')->group(function () {
-            Route::get('/sheets/create', [InformationSheetController::class, 'create'])->name('sheets.create');
-            Route::post('/sheets', [InformationSheetController::class, 'store'])->name('sheets.store');
-            Route::get('/sheets/{sheet}/edit', [InformationSheetController::class, 'edit'])->name('sheets.edit');
-            Route::put('/sheets/{sheet}', [InformationSheetController::class, 'update'])->name('sheets.update');
-            Route::delete('/sheets/{sheet}', [InformationSheetController::class, 'destroy'])->name('sheets.destroy');
-            Route::get('/sheets/{sheet}/download', [InformationSheetController::class, 'download'])->name('sheets.download');
+            Route::get('/lessons/create', [LessonController::class, 'create'])->name('lessons.create');
+            Route::post('/lessons', [LessonController::class, 'store'])->name('lessons.store');
+            Route::get('/lessons/{lesson}/edit', [LessonController::class, 'edit'])->name('lessons.edit');
+            Route::put('/lessons/{lesson}', [LessonController::class, 'update'])->name('lessons.update');
+            Route::delete('/lessons/{lesson}', [LessonController::class, 'destroy'])->name('lessons.destroy');
+            Route::get('/lessons/{lesson}/download', [LessonController::class, 'download'])->name('lessons.download');
         });
     });
 
-    // Topics (under information sheets)
-    Route::prefix('sheets/{informationSheet}')->name('sheets.')->group(function () {
+    // Topics (under lessons)
+    Route::prefix('lessons/{lesson}')->name('lessons.')->group(function () {
         Route::get('/topics/create', [TopicController::class, 'create'])->name('topics.create');
         Route::post('/topics', [TopicController::class, 'store'])->name('topics.store');
     });
@@ -113,6 +114,26 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/topics/{topic}', [TopicController::class, 'update'])->name('topics.update');
     Route::delete('/topics/{topic}', [TopicController::class, 'destroy'])->name('topics.destroy');
     Route::get('/topics/{topic}/download', [TopicController::class, 'download'])->name('topics.download');
+
+    // Quizzes (under lessons)
+    Route::prefix('lessons/{lesson}')->name('lessons.')->group(function () {
+        Route::get('/quizzes/create', [QuizController::class, 'create'])->name('quizzes.create');
+        Route::post('/quizzes', [QuizController::class, 'store'])->name('quizzes.store');
+    });
+
+    // Quiz routes
+    Route::get('/quizzes/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
+    Route::get('/quizzes/{quiz}/edit', [QuizController::class, 'edit'])->name('quizzes.edit');
+    Route::put('/quizzes/{quiz}', [QuizController::class, 'update'])->name('quizzes.update');
+    Route::delete('/quizzes/{quiz}', [QuizController::class, 'destroy'])->name('quizzes.destroy');
+
+    // Quiz taking routes
+    Route::post('/quizzes/{quiz}/start', [QuizController::class, 'start'])->name('quizzes.start');
+    Route::get('/quizzes/{quiz}/take/{attempt}', [QuizController::class, 'take'])->name('quizzes.take');
+    Route::post('/quizzes/{quiz}/submit/{attempt}', [QuizController::class, 'submit'])->name('quizzes.submit');
+    Route::get('/quizzes/{quiz}/result/{attempt}', [QuizController::class, 'result'])->name('quizzes.result');
+
+    // Quiz question management
+    Route::post('/quizzes/{quiz}/questions', [QuizController::class, 'addQuestion'])->name('quizzes.questions.store');
+    Route::delete('/quizzes/{quiz}/questions/{question}', [QuizController::class, 'removeQuestion'])->name('quizzes.questions.destroy');
 });
-
-

@@ -115,7 +115,7 @@ class CourseController extends Controller
             if ($user->isStudent()) {
                 $query->where('is_active', true);
             }
-            $query->orderBy('order');
+            $query->orderBy('order')->with('lessons');
         }]);
 
         return view('courses.show', compact('course'));

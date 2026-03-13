@@ -11,7 +11,7 @@ class Topic extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'information_sheet_id',
+        'lesson_id',
         'topic_number',
         'title',
         'content',
@@ -25,11 +25,11 @@ class Topic extends Model
     ];
 
     /**
-     * Get the information sheet that owns the topic.
+     * Get the lesson that owns the topic.
      */
-    public function informationSheet(): BelongsTo
+    public function lesson(): BelongsTo
     {
-        return $this->belongsTo(InformationSheet::class);
+        return $this->belongsTo(Lesson::class);
     }
 
     /**
@@ -37,7 +37,7 @@ class Topic extends Model
      */
     public function getNextTopic(): ?Topic
     {
-        return static::where('information_sheet_id', $this->information_sheet_id)
+        return static::where('lesson_id', $this->lesson_id)
             ->where('order', '>', $this->order)
             ->orderBy('order')
             ->first();
@@ -48,7 +48,7 @@ class Topic extends Model
      */
     public function getPreviousTopic(): ?Topic
     {
-        return static::where('information_sheet_id', $this->information_sheet_id)
+        return static::where('lesson_id', $this->lesson_id)
             ->where('order', '<', $this->order)
             ->orderBy('order', 'desc')
             ->first();

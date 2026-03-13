@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\InformationSheet;
+use App\Models\Lesson;
 use App\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,10 +14,10 @@ class TopicController extends Controller
     /**
      * Show the form for creating a new topic.
      */
-    public function create(InformationSheet $informationSheet)
+    public function create(Lesson $lesson)
     {
         $user = Auth::user();
-        $module = $informationSheet->module;
+        $module = $lesson->module;
         $course = $module->course;
 
         // Only admin or course instructor can create topics
@@ -26,19 +26,19 @@ class TopicController extends Controller
                 ->with('error', 'You do not have permission to create topics.');
         }
 
-        $nextOrder = $informationSheet->topics()->max('order') + 1;
-        $nextTopicNumber = 'T-' . str_pad($informationSheet->topics()->count() + 1, 2, '0', STR_PAD_LEFT);
+        $nextOrder = $lesson->topics()->max('order') + 1;
+        $nextTopicNumber = 'T-' . str_pad($lesson->topics()->count() + 1, 2, '0', STR_PAD_LEFT);
 
-        return view('topics.create', compact('informationSheet', 'module', 'course', 'nextOrder', 'nextTopicNumber'));
+        return view('topics.create', compact('lesson', 'module', 'course', 'nextOrder', 'nextTopicNumber'));
     }
 
     /**
      * Store a newly created topic.
      */
-    public function store(Request $request, InformationSheet $informationSheet)
+    public function store(Request $request, Lesson $lesson)
     {
         $user = Auth::user();
-        $module = $informationSheet->module;
+        $module = $lesson->module;
         $course = $module->course;
 
         // Only admin or course instructor can create topics
@@ -55,7 +55,7 @@ class TopicController extends Controller
             'file' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:10240',
         ]);
 
-        $validated['information_sheet_id'] = $informationSheet->id;
+        $validated['lesson_id'] = $lesson->id;
 
         // Handle file upload
         if ($request->hasFile('file')) {
@@ -78,12 +78,12 @@ class TopicController extends Controller
     public function show(Topic $topic)
     {
         $user = Auth::user();
-        $informationSheet = $topic->informationSheet;
-        $module = $informationSheet->module;
+        $lesson = $topic->lesson;
+        $module = $lesson->module;
         $course = $module->course;
 
         // Check access for students
-        if ($user->isStudent() && (!$course->is_active || !$module->is_active || !$informationSheet->is_active)) {
+        if ($user->isStudent() && (!$course->is_active || !$module->is_active || !$lesson->is_active)) {
             return redirect()->route('courses.index')
                 ->with('error', 'This content is not available.');
         }
@@ -97,7 +97,7 @@ class TopicController extends Controller
         $previousTopic = $topic->getPreviousTopic();
         $nextTopic = $topic->getNextTopic();
 
-        return view('topics.show', compact('topic', 'informationSheet', 'module', 'course', 'previousTopic', 'nextTopic'));
+        return view('topics.show', compact('topic', 'lesson', 'module', 'course', 'previousTopic', 'nextTopic'));
     }
 
     /**
@@ -106,8 +106,8 @@ class TopicController extends Controller
     public function edit(Topic $topic)
     {
         $user = Auth::user();
-        $informationSheet = $topic->informationSheet;
-        $module = $informationSheet->module;
+        $lesson = $topic->lesson;
+        $module = $lesson->module;
         $course = $module->course;
 
         // Only admin or course instructor can edit topics
@@ -116,7 +116,7 @@ class TopicController extends Controller
                 ->with('error', 'You do not have permission to edit this topic.');
         }
 
-        return view('topics.edit', compact('topic', 'informationSheet', 'module', 'course'));
+        return view('topics.edit', compact('topic', 'lesson', 'module', 'course'));
     }
 
     /**
@@ -125,8 +125,8 @@ class TopicController extends Controller
     public function update(Request $request, Topic $topic)
     {
         $user = Auth::user();
-        $informationSheet = $topic->informationSheet;
-        $module = $informationSheet->module;
+        $lesson = $topic->lesson;
+        $module = $lesson->module;
         $course = $module->course;
 
         // Only admin or course instructor can update topics
@@ -169,8 +169,8 @@ class TopicController extends Controller
     public function destroy(Topic $topic)
     {
         $user = Auth::user();
-        $informationSheet = $topic->informationSheet;
-        $module = $informationSheet->module;
+        $lesson = $topic->lesson;
+        $module = $lesson->module;
         $course = $module->course;
 
         // Only admin or course instructor can delete topics

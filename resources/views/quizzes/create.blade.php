@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Edit Information Sheet - Studyhive</title>
+    <title>Create Quiz - Studyhive</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -106,82 +106,11 @@
             resize: vertical;
         }
 
-        .form-group textarea.content-editor {
-            min-height: 250px;
-        }
-
         .form-group small {
             display: block;
             margin-top: 0.375rem;
             font-size: 0.8125rem;
             color: var(--gray-600);
-        }
-
-        .current-file {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem;
-            background: var(--gray-100);
-            border-radius: 6px;
-            margin-bottom: 0.75rem;
-        }
-
-        .current-file i {
-            color: var(--green-primary);
-            font-size: 1.25rem;
-        }
-
-        .current-file span {
-            flex: 1;
-            font-size: 0.875rem;
-            color: var(--gray-700);
-        }
-
-        .current-file a {
-            color: var(--green-primary);
-            text-decoration: none;
-            font-size: 0.8125rem;
-        }
-
-        .current-file a:hover {
-            text-decoration: underline;
-        }
-
-        .file-upload {
-            border: 2px dashed var(--gray-200);
-            border-radius: 6px;
-            padding: 1.5rem;
-            text-align: center;
-            transition: border-color 0.2s ease, background 0.2s ease;
-        }
-
-        .file-upload:hover {
-            border-color: var(--green-light);
-            background: var(--green-pale);
-        }
-
-        .file-upload i {
-            font-size: 2rem;
-            color: var(--gray-400);
-            margin-bottom: 0.75rem;
-        }
-
-        .file-upload p {
-            color: var(--gray-600);
-            margin: 0;
-        }
-
-        .file-upload input {
-            position: absolute;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-        }
-
-        .file-upload-wrapper {
-            position: relative;
         }
 
         .checkbox-group {
@@ -263,6 +192,31 @@
             margin: 0;
             padding-left: 1.25rem;
         }
+
+        .context-info {
+            background: var(--green-pale);
+            border: 1px solid var(--green-light);
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .context-info h3 {
+            font-size: 0.875rem;
+            color: var(--green-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .context-info p {
+            font-size: 0.9375rem;
+            color: var(--gray-800);
+            margin: 0;
+        }
+
+        .context-info span {
+            color: var(--gray-600);
+            font-size: 0.8125rem;
+        }
     </style>
 </head>
 <body>
@@ -277,11 +231,11 @@
                 <i class="fas fa-chevron-right"></i>
                 <a href="{{ route('courses.modules.show', [$course, $module]) }}">{{ $module->module_number }}</a>
                 <i class="fas fa-chevron-right"></i>
-                <span>Edit {{ $sheet->sheet_number }}</span>
+                <span>Create Quiz</span>
             </div>
 
             <div class="form-header">
-                <h1><i class="fas fa-edit"></i> Edit Information Sheet</h1>
+                <h1><i class="fas fa-clipboard-question"></i> Create New Quiz</h1>
             </div>
 
             @if($errors->any())
@@ -294,71 +248,69 @@
                 </div>
             @endif
 
-            <form action="{{ route('courses.modules.sheets.update', [$course, $module, $sheet]) }}" method="POST" enctype="multipart/form-data" class="form-card">
+            <div class="context-info">
+                <h3>Adding quiz to:</h3>
+                <p>{{ $lesson->title }}</p>
+                <span>{{ $module->module_title }} &bull; {{ $course->course_name }}</span>
+            </div>
+
+            <form action="{{ route('lessons.quizzes.store', $lesson) }}" method="POST" class="form-card">
                 @csrf
-                @method('PUT')
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="sheet_number">Sheet Number <span class="required">*</span></label>
-                        <input type="text" id="sheet_number" name="sheet_number" value="{{ old('sheet_number', $sheet->sheet_number) }}" required placeholder="e.g., IS-01">
-                        <small>A unique identifier for this sheet</small>
+                        <label for="quiz_number">Quiz Number <span class="required">*</span></label>
+                        <input type="text" id="quiz_number" name="quiz_number" value="{{ old('quiz_number', $nextQuizNumber) }}" required placeholder="e.g., Q-01">
+                        <small>A unique identifier for this quiz</small>
                     </div>
 
                     <div class="form-group">
                         <label for="order">Display Order <span class="required">*</span></label>
-                        <input type="number" id="order" name="order" value="{{ old('order', $sheet->order) }}" required min="0">
-                        <small>Order in which sheet appears</small>
+                        <input type="number" id="order" name="order" value="{{ old('order', $nextOrder) }}" required min="0">
+                        <small>Order in which quiz appears</small>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="title">Title <span class="required">*</span></label>
-                    <input type="text" id="title" name="title" value="{{ old('title', $sheet->title) }}" required placeholder="Enter the information sheet title">
+                    <input type="text" id="title" name="title" value="{{ old('title') }}" required placeholder="Enter the quiz title">
                 </div>
 
                 <div class="form-group">
                     <label for="description">Description</label>
-                    <textarea id="description" name="description" placeholder="Provide a brief description of this information sheet">{{ old('description', $sheet->description) }}</textarea>
+                    <textarea id="description" name="description" placeholder="Provide a brief description of this quiz">{{ old('description') }}</textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="content">Content</label>
-                    <textarea id="content" name="content" class="content-editor" placeholder="Enter the main content for this information sheet">{{ old('content', $sheet->content) }}</textarea>
+                    <label for="instructions">Instructions</label>
+                    <textarea id="instructions" name="instructions" placeholder="Enter instructions for students taking this quiz">{{ old('instructions') }}</textarea>
+                    <small>These instructions will be shown before the quiz starts</small>
                 </div>
 
-                <div class="form-group">
-                    <label for="file">Attachment</label>
-                    @if($sheet->file_path)
-                        <div class="current-file">
-                            <i class="fas fa-file"></i>
-                            <span>{{ $sheet->original_filename ?? 'Current file' }}</span>
-                            <a href="{{ route('courses.modules.sheets.download', [$course, $module, $sheet]) }}">
-                                <i class="fas fa-download"></i> Download
-                            </a>
-                        </div>
-                        <small>Upload a new file to replace the current one</small>
-                    @endif
-                    <div class="file-upload-wrapper">
-                        <div class="file-upload">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <p>Click to upload or drag and drop</p>
-                            <small>PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX (Max: 10MB)</small>
-                            <input type="file" id="file" name="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx">
-                        </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="time_limit">Time Limit (minutes)</label>
+                        <input type="number" id="time_limit" name="time_limit" value="{{ old('time_limit') }}" min="1" placeholder="Leave empty for no limit">
+                        <small>Optional time limit for the quiz</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="passing_score">Passing Score (%) <span class="required">*</span></label>
+                        <input type="number" id="passing_score" name="passing_score" value="{{ old('passing_score', 70) }}" required min="0" max="100">
+                        <small>Minimum percentage to pass</small>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="checkbox-group">
-                        <input type="checkbox" id="is_active" name="is_active" value="1" {{ old('is_active', $sheet->is_active) ? 'checked' : '' }}>
+                        <input type="checkbox" id="is_active" name="is_active" value="1" {{ old('is_active', true) ? 'checked' : '' }}>
                         <label for="is_active">Active (visible to students)</label>
                     </div>
                 </div>
 
                 <div class="form-actions">
                     <button type="submit" class="btn-submit">
-                        <i class="fas fa-save"></i> Update Information Sheet
+                        <i class="fas fa-save"></i> Create Quiz
                     </button>
                     <a href="{{ route('courses.modules.show', [$course, $module]) }}" class="btn-cancel">
                         <i class="fas fa-times"></i> Cancel
@@ -367,14 +319,5 @@
             </form>
         </div>
     </div>
-
-    <script>
-        document.getElementById('file').addEventListener('change', function(e) {
-            const fileName = e.target.files[0]?.name;
-            if (fileName) {
-                document.querySelector('.file-upload p').textContent = fileName;
-            }
-        });
-    </script>
 </body>
 </html>

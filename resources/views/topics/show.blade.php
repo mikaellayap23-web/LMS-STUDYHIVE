@@ -379,7 +379,7 @@
                 <h1 class="topic-title">{{ $topic->title }}</h1>
 
                 <div class="topic-info">
-                    <span><i class="fas fa-file-alt"></i> {{ $informationSheet->title }}</span>
+                    <span><i class="fas fa-book-open"></i> {{ $lesson->title }}</span>
                     <span><i class="fas fa-book"></i> {{ $module->module_title }}</span>
                     <span><i class="fas fa-calendar"></i> Updated {{ $topic->updated_at->format('M d, Y') }}</span>
                 </div>

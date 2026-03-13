@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Create Information Sheet - Studyhive</title>
+    <title>Create Lesson - Studyhive</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -271,11 +271,11 @@
                 <i class="fas fa-chevron-right"></i>
                 <a href="{{ route('courses.modules.show', [$course, $module]) }}">{{ $module->module_number }}</a>
                 <i class="fas fa-chevron-right"></i>
-                <span>Create Sheet</span>
+                <span>Create Lesson</span>
             </div>
 
             <div class="form-header">
-                <h1><i class="fas fa-file-alt"></i> Create Information Sheet</h1>
+                <h1><i class="fas fa-book-open"></i> Create Lesson</h1>
             </div>
 
             @if($errors->any())
@@ -294,37 +294,37 @@
                 <span>{{ $course->course_name }}</span>
             </div>
 
-            <form action="{{ route('courses.modules.sheets.store', [$course, $module]) }}" method="POST" enctype="multipart/form-data" class="form-card">
+            <form action="{{ route('courses.modules.lessons.store', [$course, $module]) }}" method="POST" enctype="multipart/form-data" class="form-card">
                 @csrf
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="sheet_number">Sheet Number <span class="required">*</span></label>
-                        <input type="text" id="sheet_number" name="sheet_number" value="{{ old('sheet_number', $nextSheetNumber) }}" required placeholder="e.g., IS-01">
-                        <small>A unique identifier for this sheet</small>
+                        <label for="lesson_number">Lesson Number <span class="required">*</span></label>
+                        <input type="text" id="lesson_number" name="lesson_number" value="{{ old('lesson_number', $nextLessonNumber) }}" required placeholder="e.g., L-01">
+                        <small>A unique identifier for this lesson</small>
                     </div>
 
                     <div class="form-group">
                         <label for="order">Display Order <span class="required">*</span></label>
                         <input type="number" id="order" name="order" value="{{ old('order', $nextOrder) }}" required min="0">
-                        <small>Order in which sheet appears</small>
+                        <small>Order in which lesson appears</small>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="title">Title <span class="required">*</span></label>
-                    <input type="text" id="title" name="title" value="{{ old('title') }}" required placeholder="Enter the information sheet title">
+                    <input type="text" id="title" name="title" value="{{ old('title') }}" required placeholder="Enter the lesson title">
                 </div>
 
                 <div class="form-group">
                     <label for="description">Description</label>
-                    <textarea id="description" name="description" placeholder="Provide a brief description of this information sheet">{{ old('description') }}</textarea>
+                    <textarea id="description" name="description" placeholder="Provide a brief description of this lesson">{{ old('description') }}</textarea>
                 </div>
 
                 <div class="form-group">
                     <label for="content">Content</label>
-                    <textarea id="content" name="content" class="content-editor" placeholder="Enter the main content for this information sheet">{{ old('content') }}</textarea>
-                    <small>You can add detailed content here. Topics can be added after creating the sheet.</small>
+                    <textarea id="content" name="content" class="content-editor" placeholder="Enter the main content for this lesson">{{ old('content') }}</textarea>
+                    <small>You can add detailed content here. Topics and quizzes can be added after creating the lesson.</small>
                 </div>
 
                 <div class="form-group">
@@ -348,7 +348,7 @@
 
                 <div class="form-actions">
                     <button type="submit" class="btn-submit">
-                        <i class="fas fa-save"></i> Create Information Sheet
+                        <i class="fas fa-save"></i> Create Lesson
                     </button>
                     <a href="{{ route('courses.modules.show', [$course, $module]) }}" class="btn-cancel">
                         <i class="fas fa-times"></i> Cancel

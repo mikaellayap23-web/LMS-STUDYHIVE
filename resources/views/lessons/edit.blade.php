@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Create Topic - Studyhive</title>
+    <title>Edit Lesson - Studyhive</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -107,7 +107,7 @@
         }
 
         .form-group textarea.content-editor {
-            min-height: 300px;
+            min-height: 250px;
         }
 
         .form-group small {
@@ -115,6 +115,37 @@
             margin-top: 0.375rem;
             font-size: 0.8125rem;
             color: var(--gray-600);
+        }
+
+        .current-file {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: var(--gray-100);
+            border-radius: 6px;
+            margin-bottom: 0.75rem;
+        }
+
+        .current-file i {
+            color: var(--green-primary);
+            font-size: 1.25rem;
+        }
+
+        .current-file span {
+            flex: 1;
+            font-size: 0.875rem;
+            color: var(--gray-700);
+        }
+
+        .current-file a {
+            color: var(--green-primary);
+            text-decoration: none;
+            font-size: 0.8125rem;
+        }
+
+        .current-file a:hover {
+            text-decoration: underline;
         }
 
         .file-upload {
@@ -151,6 +182,23 @@
 
         .file-upload-wrapper {
             position: relative;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--green-primary);
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            font-weight: 500;
         }
 
         .form-actions {
@@ -215,31 +263,6 @@
             margin: 0;
             padding-left: 1.25rem;
         }
-
-        .context-info {
-            background: var(--green-pale);
-            border: 1px solid var(--green-light);
-            border-radius: 6px;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .context-info h3 {
-            font-size: 0.875rem;
-            color: var(--green-primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .context-info p {
-            font-size: 0.9375rem;
-            color: var(--gray-800);
-            margin: 0;
-        }
-
-        .context-info span {
-            color: var(--gray-600);
-            font-size: 0.8125rem;
-        }
     </style>
 </head>
 <body>
@@ -254,11 +277,11 @@
                 <i class="fas fa-chevron-right"></i>
                 <a href="{{ route('courses.modules.show', [$course, $module]) }}">{{ $module->module_number }}</a>
                 <i class="fas fa-chevron-right"></i>
-                <span>Create Topic</span>
+                <span>Edit {{ $lesson->lesson_number }}</span>
             </div>
 
             <div class="form-header">
-                <h1><i class="fas fa-bookmark"></i> Create New Topic</h1>
+                <h1><i class="fas fa-edit"></i> Edit Lesson</h1>
             </div>
 
             @if($errors->any())
@@ -271,42 +294,51 @@
                 </div>
             @endif
 
-            <div class="context-info">
-                <h3>Adding topic to:</h3>
-                <p>{{ $lesson->title }}</p>
-                <span>{{ $module->module_title }} &bull; {{ $course->course_name }}</span>
-            </div>
-
-            <form action="{{ route('lessons.topics.store', $lesson) }}" method="POST" enctype="multipart/form-data" class="form-card">
+            <form action="{{ route('courses.modules.lessons.update', [$course, $module, $lesson]) }}" method="POST" enctype="multipart/form-data" class="form-card">
                 @csrf
+                @method('PUT')
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="topic_number">Topic Number <span class="required">*</span></label>
-                        <input type="text" id="topic_number" name="topic_number" value="{{ old('topic_number', $nextTopicNumber) }}" required placeholder="e.g., T-01">
-                        <small>A unique identifier for this topic</small>
+                        <label for="lesson_number">Lesson Number <span class="required">*</span></label>
+                        <input type="text" id="lesson_number" name="lesson_number" value="{{ old('lesson_number', $lesson->lesson_number) }}" required placeholder="e.g., L-01">
+                        <small>A unique identifier for this lesson</small>
                     </div>
 
                     <div class="form-group">
                         <label for="order">Display Order <span class="required">*</span></label>
-                        <input type="number" id="order" name="order" value="{{ old('order', $nextOrder) }}" required min="0">
-                        <small>Order in which topic appears</small>
+                        <input type="number" id="order" name="order" value="{{ old('order', $lesson->order) }}" required min="0">
+                        <small>Order in which lesson appears</small>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="title">Title <span class="required">*</span></label>
-                    <input type="text" id="title" name="title" value="{{ old('title') }}" required placeholder="Enter the topic title">
+                    <input type="text" id="title" name="title" value="{{ old('title', $lesson->title) }}" required placeholder="Enter the lesson title">
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" placeholder="Provide a brief description of this lesson">{{ old('description', $lesson->description) }}</textarea>
                 </div>
 
                 <div class="form-group">
                     <label for="content">Content</label>
-                    <textarea id="content" name="content" class="content-editor" placeholder="Enter the topic content here...">{{ old('content') }}</textarea>
-                    <small>The main content of this topic</small>
+                    <textarea id="content" name="content" class="content-editor" placeholder="Enter the main content for this lesson">{{ old('content', $lesson->content) }}</textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="file">Attachment (Optional)</label>
+                    <label for="file">Attachment</label>
+                    @if($lesson->file_path)
+                        <div class="current-file">
+                            <i class="fas fa-file"></i>
+                            <span>{{ $lesson->original_filename ?? 'Current file' }}</span>
+                            <a href="{{ route('courses.modules.lessons.download', [$course, $module, $lesson]) }}">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        </div>
+                        <small>Upload a new file to replace the current one</small>
+                    @endif
                     <div class="file-upload-wrapper">
                         <div class="file-upload">
                             <i class="fas fa-cloud-upload-alt"></i>
@@ -317,9 +349,16 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="is_active" name="is_active" value="1" {{ old('is_active', $lesson->is_active) ? 'checked' : '' }}>
+                        <label for="is_active">Active (visible to students)</label>
+                    </div>
+                </div>
+
                 <div class="form-actions">
                     <button type="submit" class="btn-submit">
-                        <i class="fas fa-save"></i> Create Topic
+                        <i class="fas fa-save"></i> Update Lesson
                     </button>
                     <a href="{{ route('courses.modules.show', [$course, $module]) }}" class="btn-cancel">
                         <i class="fas fa-times"></i> Cancel

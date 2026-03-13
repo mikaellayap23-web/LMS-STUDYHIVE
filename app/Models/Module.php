@@ -49,10 +49,10 @@ class Module extends Model
             }
         });
 
-        // Cascade soft delete to information sheets
+        // Cascade soft delete to lessons
         static::deleting(function ($module) {
-            $module->informationSheets()->each(function ($sheet) {
-                $sheet->delete();
+            $module->lessons()->each(function ($lesson) {
+                $lesson->delete();
             });
         });
     }
@@ -87,19 +87,19 @@ class Module extends Model
     }
 
     /**
-     * Get the information sheets for the module.
+     * Get the lessons for the module.
      */
-    public function informationSheets(): HasMany
+    public function lessons(): HasMany
     {
-        return $this->hasMany(InformationSheet::class)->orderBy('order');
+        return $this->hasMany(Lesson::class)->orderBy('order');
     }
 
     /**
-     * Get the active information sheets for the module.
+     * Get the active lessons for the module.
      */
-    public function activeInformationSheets(): HasMany
+    public function activeLessons(): HasMany
     {
-        return $this->hasMany(InformationSheet::class)
+        return $this->hasMany(Lesson::class)
             ->where('is_active', true)
             ->orderBy('order');
     }

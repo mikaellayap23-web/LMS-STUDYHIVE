@@ -77,11 +77,11 @@ class ModuleController extends Controller
                 ->with('error', 'You do not have access to this module.');
         }
 
-        $module->load(['informationSheets' => function ($query) use ($user) {
+        $module->load(['lessons' => function ($query) use ($user) {
             if ($user->isStudent()) {
                 $query->where('is_active', true);
             }
-            $query->orderBy('order')->with('topics');
+            $query->orderBy('order')->with(['topics', 'quizzes']);
         }]);
 
         return view('modules.show', compact('course', 'module'));

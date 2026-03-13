@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('information_sheets', function (Blueprint $table) {
+        Schema::create('lessons', function (Blueprint $table) {
             $table->id();
             $table->foreignId('module_id')->constrained()->cascadeOnDelete();
-            $table->string('sheet_number', 50);
+            $table->string('lesson_number', 50);
             $table->string('title', 255);
             $table->text('description')->nullable();
             $table->longText('content')->nullable();
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('information_sheets');
+        Schema::dropIfExists('lessons');
     }
 };
