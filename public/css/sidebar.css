@@ -1,0 +1,218 @@
+/* Sidebar Container */
+.sidebar {
+    width: 260px;
+    height: 100vh;
+    background: linear-gradient(180deg, var(--green-primary) 0%, var(--green-secondary) 100%);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+}
+
+/* User Profile Section */
+.sidebar-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 28px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    margin-bottom: 14px;
+}
+
+.sidebar-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--white);
+    background: linear-gradient(135deg, var(--green-light) 0%, var(--green-secondary) 100%);
+}
+
+.sidebar-info {
+    min-width: 0;
+}
+
+.sidebar-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--white);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sidebar-role {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.75);
+    margin: 4px 0 0;
+    text-transform: capitalize;
+    letter-spacing: 0.3px;
+}
+
+/* Navigation Menu */
+.sidebar-nav {
+    flex: 1;
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow-y: auto;
+}
+
+.nav-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.nav-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.12);
+    margin: 4px 0;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 11px 16px;
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    transition: all 0.25s ease;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.nav-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--white);
+    transform: translateX(3px);
+}
+
+.nav-link.active {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--white);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nav-link i {
+    width: 20px;
+    font-size: 16px;
+    text-align: center;
+}
+
+/* Logout Button */
+.sidebar-footer {
+    padding: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.logout-btn {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+    border: none;
+    padding: 11px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-align: left;
+    border-radius: 8px;
+}
+
+.logout-btn:hover {
+    background: rgba(239, 68, 68, 0.85);
+    color: var(--white);
+    transform: translateX(3px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.logout-btn i {
+    width: 20px;
+    font-size: 16px;
+    text-align: center;
+}
+
+/* Main Content Wrapper */
+.main-content {
+    margin-left: 260px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 70px;
+    }
+
+    .main-content {
+        margin-left: 70px;
+    }
+
+    .sidebar-profile {
+        padding: 20px 14px;
+    }
+
+    .sidebar-avatar {
+        width: 42px;
+        height: 42px;
+        margin-bottom: 0;
+    }
+
+    .sidebar-info,
+    .nav-link span,
+    .logout-btn span,
+    .nav-divider {
+        display: none;
+    }
+
+    .nav-group {
+        gap: 0;
+    }
+
+    .nav-link,
+    .logout-btn {
+        padding: 12px;
+        justify-content: center;
+        gap: 0;
+    }
+
+    .nav-link:hover,
+    .logout-btn:hover {
+        transform: none;
+    }
+
+    .nav-link i,
+    .logout-btn i {
+        width: auto;
+        font-size: 18px;
+    }
+}
