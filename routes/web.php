@@ -6,6 +6,10 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\InformationSheetController;
+use App\Http\Controllers\TopicController;
 
 //WELCOME PAGE//
 
@@ -70,6 +74,45 @@ Route::middleware(['auth'])->prefix('announcements')->name('announcements.')->gr
     Route::get('/{announcement}/edit', [AnnouncementController::class, 'edit'])->name('edit');
     Route::put('/{announcement}', [AnnouncementController::class, 'update'])->name('update');
     Route::delete('/{announcement}', [AnnouncementController::class, 'destroy'])->name('destroy');
+});
+
+//COURSE AND MODULE MANAGEMENT ROUTES
+Route::middleware(['auth'])->group(function () {
+    // Courses
+    Route::resource('courses', CourseController::class);
+
+    // Modules (nested under courses)
+    Route::prefix('courses/{course}')->name('courses.')->group(function () {
+        Route::get('/modules/create', [ModuleController::class, 'create'])->name('modules.create');
+        Route::post('/modules', [ModuleController::class, 'store'])->name('modules.store');
+        Route::get('/modules/{module}', [ModuleController::class, 'show'])->name('modules.show');
+        Route::get('/modules/{module}/edit', [ModuleController::class, 'edit'])->name('modules.edit');
+        Route::put('/modules/{module}', [ModuleController::class, 'update'])->name('modules.update');
+        Route::delete('/modules/{module}', [ModuleController::class, 'destroy'])->name('modules.destroy');
+
+        // Information Sheets (nested under modules)
+        Route::prefix('modules/{module}')->name('modules.')->group(function () {
+            Route::get('/sheets/create', [InformationSheetController::class, 'create'])->name('sheets.create');
+            Route::post('/sheets', [InformationSheetController::class, 'store'])->name('sheets.store');
+            Route::get('/sheets/{sheet}/edit', [InformationSheetController::class, 'edit'])->name('sheets.edit');
+            Route::put('/sheets/{sheet}', [InformationSheetController::class, 'update'])->name('sheets.update');
+            Route::delete('/sheets/{sheet}', [InformationSheetController::class, 'destroy'])->name('sheets.destroy');
+            Route::get('/sheets/{sheet}/download', [InformationSheetController::class, 'download'])->name('sheets.download');
+        });
+    });
+
+    // Topics (under information sheets)
+    Route::prefix('sheets/{informationSheet}')->name('sheets.')->group(function () {
+        Route::get('/topics/create', [TopicController::class, 'create'])->name('topics.create');
+        Route::post('/topics', [TopicController::class, 'store'])->name('topics.store');
+    });
+
+    // Topic routes
+    Route::get('/topics/{topic}', [TopicController::class, 'show'])->name('topics.show');
+    Route::get('/topics/{topic}/edit', [TopicController::class, 'edit'])->name('topics.edit');
+    Route::put('/topics/{topic}', [TopicController::class, 'update'])->name('topics.update');
+    Route::delete('/topics/{topic}', [TopicController::class, 'destroy'])->name('topics.destroy');
+    Route::get('/topics/{topic}/download', [TopicController::class, 'download'])->name('topics.download');
 });
 
 

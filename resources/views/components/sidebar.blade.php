@@ -48,9 +48,9 @@
                     <i class="fas fa-users"></i>
                     <span>User Management</span>
                 </a>
-                <a href="#" class="nav-link {{ $active === 'modules' ? 'active' : '' }}" onclick="return false;">
+                <a href="{{ route('courses.index') }}" class="nav-link {{ $active === 'modules' ? 'active' : '' }}">
                     <i class="fas fa-book"></i>
-                    <span>Modules</span>
+                    <span>Courses & Modules</span>
                 </a>
                 <a href="#" class="nav-link {{ $active === 'assessments' ? 'active' : '' }}" onclick="return false;">
                     <i class="fas fa-clipboard-check"></i>
@@ -82,16 +82,16 @@
             <div class="nav-divider"></div>
             
             <div class="nav-group">
-                <a href="#" class="nav-link {{ $active === 'modules' ? 'active' : '' }}" onclick="return false;">
+                <a href="{{ route('courses.index') }}" class="nav-link {{ $active === 'modules' ? 'active' : '' }}">
                     <i class="fas fa-book"></i>
-                    <span>Modules</span>
+                    <span>My Courses</span>
                 </a>
                 <a href="#" class="nav-link {{ $active === 'assessments' ? 'active' : '' }}" onclick="return false;">
                     <i class="fas fa-clipboard-check"></i>
                     <span>Assessments</span>
                 </a>
             </div>
-            
+
             <div class="nav-divider"></div>
 
             <div class="nav-group">
@@ -116,9 +116,9 @@
             <div class="nav-divider"></div>
 
             <div class="nav-group">
-                <a href="#" class="nav-link {{ $active === 'my-modules' ? 'active' : '' }}" onclick="return false;">
+                <a href="{{ route('courses.index') }}" class="nav-link {{ $active === 'my-modules' || $active === 'modules' ? 'active' : '' }}">
                     <i class="fas fa-book"></i>
-                    <span>My Modules</span>
+                    <span>My Courses</span>
                 </a>
                 <a href="{{ route('announcements.index') }}" class="nav-link {{ $active === 'announcements' ? 'active' : '' }}">
                     <i class="fas fa-bullhorn"></i>
