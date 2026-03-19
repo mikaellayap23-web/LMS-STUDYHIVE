@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\Module;
+use App\Models\Lesson;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -81,10 +82,79 @@ class ModuleController extends Controller
             if ($user->isStudent()) {
                 $query->where('is_active', true);
             }
-            $query->orderBy('order')->with(['topics', 'quizzes']);
+            $query->orderBy('order')->with(['topics', 'quizzes.attempts' => function($q) use ($user) {
+                $q->where('user_id', $user->id);
+            }]);
         }]);
 
-        return view('modules.show', compact('course', 'module'));
+        // Calculate progress and unlock status for each lesson
+        $lessonProgress = $this->calculateLessonProgress($module, $user);
+        $totalLessons = $module->lessons->count();
+        $completedLessons = collect($lessonProgress)->where('completed', true)->count();
+        $progressPercentage = $totalLessons > 0 ? round(($completedLessons / $totalLessons) * 100) : 0;
+
+        // Get previous/next modules
+        $allModules = $course->modules()->ordered()->get();
+        $currentIndex = $allModules->search(fn($m) => $m->id === $module->id);
+        $previousModule = $currentIndex > 0 ? $allModules[$currentIndex - 1] : null;
+        $nextModule = $currentIndex < $allModules->count() - 1 ? $allModules[$currentIndex + 1] : null;
+
+        return view('modules.show', compact(
+            'course',
+            'module',
+            'lessonProgress',
+            'totalLessons',
+            'completedLessons',
+            'progressPercentage',
+            'previousModule',
+            'nextModule'
+        ));
+    }
+
+    /**
+     * Calculate progress and unlock status for each lesson in a module.
+     */
+    private function calculateLessonProgress(Module $module, $user): array
+    {
+        $progress = [];
+        $previousCompleted = true; // First lesson is always unlocked
+
+        foreach ($module->lessons as $lesson) {
+            // Check if the lesson's required quizzes have been passed
+            $lessonCompleted = $this->isLessonCompleted($lesson, $user);
+
+            $progress[$lesson->id] = [
+                'unlocked' => $previousCompleted,
+                'completed' => $lessonCompleted,
+                'quiz_passed' => $lessonCompleted,
+            ];
+
+            // For next lesson to be unlocked, this lesson must be completed
+            $previousCompleted = $lessonCompleted;
+        }
+
+        return $progress;
+    }
+
+    /**
+     * Check if a lesson is completed (all required quizzes passed).
+     */
+    private function isLessonCompleted(Lesson $lesson, $user): bool
+    {
+        // If no quizzes, consider lesson completed when accessed (for now, always true)
+        if ($lesson->quizzes->isEmpty()) {
+            return true;
+        }
+
+        // Check if any quiz in this lesson has been passed
+        foreach ($lesson->quizzes as $quiz) {
+            $passedAttempt = $quiz->attempts->where('passed', true)->first();
+            if ($passedAttempt) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
